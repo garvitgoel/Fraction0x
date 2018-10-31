@@ -139,7 +139,7 @@ contract Crowdsale is Ownable  {
 
     // calculate token amount to be created
     uint256 tokens = _getTokenAmount(usdCents);
-   //_preValidatePurchase(_beneficiary, usdCents);
+   _preValidatePurchase(_beneficiary, usdCents);
     
 
     // update state
@@ -174,7 +174,7 @@ contract Crowdsale is Ownable  {
     
     RaisedInCents.add(_usdCents);
     
-    require(hardCap < RaisedInCents);
+    require(hardCap > RaisedInCents);
     
     return true;
   }
