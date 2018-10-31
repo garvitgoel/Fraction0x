@@ -125,10 +125,7 @@ contract('Solar91', async (accounts) => {
     var trans1 = await this.tokenhold.transfer(accounts[3],1000000000000000000000,{from:accounts[2]});
     var aftertrans2 = await this.tokenhold.balanceOf.call(accounts[2]);
     var aftertrans3 = await this.tokenhold.balanceOf.call(accounts[3]);
-    console.log(beforetrans1.toNumber(), 'acc2 bal before');
-    console.log(balanceOfBeneficiary4.toNumber(), 'acc 3 before');
-    console.log(aftertrans2.toNumber(), 'acc2 after transfer');
-    console.log(aftertrans3.toNumber(), 'acc3 after transfer');
+    assert(aftertrans3,1000000000000000000000);
 
   });
 
@@ -142,6 +139,34 @@ contract('Solar91', async (accounts) => {
 
   });
 
+  it("Should not able to transfer tokens after getting disapproved by owner  ", async () => {
+
+    let allowdToTransfer2 = await this.tokenhold.approveByOwner.call(accounts[2], accounts[3]);
+    assert.equal(allowdToTransfer2, false, "allowance is wrong");
+
+    try{
+
+      var trans1 = await this.tokenhold.transfer(accounts[3],1000000000000000000000,{from:accounts[2]});
+      
+
+      } catch(error){
+
+        var error_ = 'VM Exception while processing transaction: revert';
+        assert.equal(error.message, error_, 'Token ammount');
+
+      }
+    
+
+  });
+
+  it("should Approve address to spend specific token ", async ()=> {
+
+    this.tokenhold.approve(accounts[3], 200000);
+    let allowance = await this.tokenhold.allowance.call(accounts[0],accounts[3]);
+    assert.equal(allowance,200000,"allowance is wrong");
+      
+  });
+
   it("Should be able to transfer ownership of Crowdsale Contract ", async () => {
 
     let ownerOld1 = await this.crowdhold.owner.call();
@@ -151,6 +176,12 @@ contract('Solar91', async (accounts) => {
 
   });
 
+  it("Should be able to Pause and check investor not able to get token when pause ", async () => {
+    
+      var pausing = await this.tokenhold.pause({ from: accounts[0] });
+      var pause_status = await this.tokenhold.paused.call();
+      assert.equal(pause_status,true); 
+  });
 
 
 })

@@ -40,7 +40,7 @@ contract Crowdsale is Ownable  {
   // Amount of usd in cents Raised
   
   uint256 public RaisedInCents;
-  uint256 public duration;
+  uint256 public duration = 60 days;
   
   mapping (address => bool) public whitelistedContributors;
   mapping(address => uint256) public beneficiaryVsTokens;
@@ -59,7 +59,9 @@ contract Crowdsale is Ownable  {
   uint256 public ethPrice;
   
   bool public crowdsalestarted = false;
-
+ 
+  uint256 public crowdsalestartTime;
+  uint256 public crowdsaleEndTime;
   
   
   //percentage of bonus in different phases
@@ -112,6 +114,8 @@ contract Crowdsale is Ownable  {
       
       require(!crowdsalestarted);
       crowdsalestarted = true;
+      crowdsalestartTime = now;
+      crowdsaleEndTime =now.add(duration);
       
   }  
   
@@ -132,7 +136,7 @@ contract Crowdsale is Ownable  {
     require(ethPrice > 0);
     require(whitelistedContributors[_beneficiary] == true);
     require(crowdsalestarted == true);
-    
+    require(now >= crowdsalestartTime && crowdsaleEndTime >=now );
     
     uint256 usdCents = weiAmount.mul(ethPrice).div(1 ether); 
     

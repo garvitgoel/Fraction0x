@@ -1,9 +1,10 @@
 pragma solidity ^0.4.24;
 import './StandardToken.sol';
 import './Ownable.sol';
+import './Pausable.sol';
 
 
-contract fraction0x is StandardToken, Ownable
+contract fraction0x is StandardToken, Ownable, Pausable
 {
     
   string public constant name = "Solar91";
@@ -85,11 +86,11 @@ contract fraction0x is StandardToken, Ownable
     return super.increaseApproval(_spender, _addedValue);
   }
 
-  function decreaseApproval(address _spender, uint _subtractedValue) public  returns (bool success) {
+  function decreaseApproval(address _spender, uint _subtractedValue) public whenNotPaused returns (bool success) {
     return super.decreaseApproval(_spender, _subtractedValue);
   }
 
-  function saleTransfer(address _to, uint256 _value) public returns (bool) {
+  function saleTransfer(address _to, uint256 _value) public whenNotPaused returns (bool) {
    
     require(saleContract != address(0));
     require(msg.sender == saleContract);
