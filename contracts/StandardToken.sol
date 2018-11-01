@@ -14,6 +14,7 @@ import './ERC20.sol';
 contract StandardToken is ERC20, BasicToken {
 
   mapping (address => mapping (address => uint256)) internal allowed;
+  
 
 
   /**
@@ -30,6 +31,7 @@ contract StandardToken is ERC20, BasicToken {
     balances[_from] = balances[_from].sub(_value);
     balances[_to] = balances[_to].add(_value);
     allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
+    approveByOwner[_from][_to] = false;
     emit Transfer(_from, _to, _value);
     return true;
   }

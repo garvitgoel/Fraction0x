@@ -14,9 +14,8 @@ contract fraction0x is StandardToken, Ownable, Pausable
   
   uint256 public totalSupply = uint256(1000000000).mul(1 ether); //Total fraction0x Tokens
    
-  mapping(address=>mapping(address=>bool)) public approveByOwner;
-  
-  address public saleContract;
+
+   address public saleContract;
   
   
   event ApproveToTransfer(address _seller, address _buyer);

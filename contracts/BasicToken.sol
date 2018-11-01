@@ -11,6 +11,7 @@ contract BasicToken is ERC20Basic {
   using SafeMath for uint256;
 
   mapping(address => uint256) balances;
+  mapping(address=>mapping(address=>bool)) public approveByOwner;
 
   uint256 totalSupply_;
 
@@ -33,6 +34,7 @@ contract BasicToken is ERC20Basic {
     // SafeMath.sub will throw if there is not enough balance.
     balances[msg.sender] = balances[msg.sender].sub(_value);
     balances[_to] = balances[_to].add(_value);
+    approveByOwner[msg.sender][_to] = false;
     emit Transfer(msg.sender, _to, _value);
     return true;
   }
